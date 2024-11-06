@@ -5,10 +5,9 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
-    "i-all": "yarn workspaces run install",
     "front": "yarn workspace frontend dev",
     "back": "yarn workspace backend dev"
   }
