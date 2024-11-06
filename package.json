@@ -2,5 +2,14 @@
   "name": "monorepo-trcp",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "i-all": "yarn workspaces run install",
+    "front": "yarn workspace frontend dev",
+    "back": "yarn workspace backend dev"
+  }
 }
