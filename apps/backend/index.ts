@@ -1,37 +1,24 @@
-// ---Dependencies
-import express from 'express';
-// ---Middlewares
-// ---DB stuff
-// ---Constants
-import { healthRoutes } from './src/express/routes/health';
+import { createHTTPServer } from '@trpc/server/adapters/standalone';
+import { applyWSSHandler } from '@trpc/server/adapters/ws';
+import { AppRouter, appRouter } from './src/trcp/app-router';
+import { WebSocketServer } from 'ws';
+import { createContext } from './src/server-context';
 
-const debugProd = require('debug')('app:prod');
+// http server
+const server = createHTTPServer({
+  router: appRouter,
+  createContext
+});
 
-/** Main wrapper */
-function main() {
-  // ---------------- CONFIG
-  const app = express();
-  // ---------------- MIDDLEWARES
-  app.use(express.json()); // Needed to read req.body
-  // customHelmet(app);
-  // morganlogger(app);
+// ws server
+const wss = new WebSocketServer({ server });
+applyWSSHandler<AppRouter>({
+  wss,
+  router: appRouter,
+  createContext
+});
 
-  // ---------------- ROUTES
-  app.use('/health/', healthRoutes);
-
-  // ---------------- SSL
-  // eslint-disable-next-line global-require
-  const http = require('http');
-
-  // const trySSL = process.env.USE_SSL || false; // Set use of https from enviroment
-
-  const server = http;
-  const options = {}; // Get ssl certs if https true
-  const APP_PORT = process.env.APP_PORT || 4000;
-  // ---------------- SERVER
-  server.createServer(options, app).listen(APP_PORT, () => {
-    debugProd(`https: ${false}, listening to port ${APP_PORT}...`);
-  });
-}
-
-main();
+// setInterval(() => {
+//   console.log('Connected clients', wss.clients.size);
+// }, 1000);
+server.listen(2022);
