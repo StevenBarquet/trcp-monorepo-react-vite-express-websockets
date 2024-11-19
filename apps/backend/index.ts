@@ -3,9 +3,11 @@ import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { AppRouter, appRouter } from './src/trcp/app-router';
 import { WebSocketServer } from 'ws';
 import { createContext } from './src/server-context';
+import cors from 'cors';
 
 // http server
 const server = createHTTPServer({
+  middleware: cors(),
   router: appRouter,
   createContext
 });

@@ -20,6 +20,7 @@
   },
   "rules": {
     "prettier/prettier": "error",
+    "import/first": "off",
     "require-jsdoc": [
       "warn",
       {

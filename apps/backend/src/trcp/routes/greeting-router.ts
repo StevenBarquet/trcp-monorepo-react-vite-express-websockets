@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { publicProcedure, router } from '../app-router';
+import { publicProcedure, router } from '../init';
 
 export const greetingRouter = router({
   hello: publicProcedure
