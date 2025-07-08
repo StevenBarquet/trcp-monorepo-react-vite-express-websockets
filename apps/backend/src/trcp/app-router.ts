@@ -5,7 +5,7 @@ import { postRouter } from './routes/post-router/post-router';
 // Merge routers together
 export const appRouter = router({
   greeting: greetingRouter,
-  post: postRouter
+  post: postRouter,
 });
 
 export type AppRouter = typeof appRouter;

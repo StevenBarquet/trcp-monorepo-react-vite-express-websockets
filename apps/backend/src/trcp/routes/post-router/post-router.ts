@@ -10,15 +10,15 @@ export const postRouter = router({
     .input(
       z.object({
         title: z.string(),
-        text: z.string()
-      })
+        text: z.string(),
+      }),
     )
     .mutation(({ input }) => {
       // imagine db call here
 
       const item = {
         id: `${Math.floor(Math.random() * 1000000)}`,
-        ...input
+        ...input,
       };
 
       postObservable.addPost(item);
@@ -27,7 +27,7 @@ export const postRouter = router({
     }),
 
   // Subscription to get updated posts
-  postUpdates: publicProcedure.subscription(() => {
+  postSubscription: publicProcedure.subscription(() => {
     return observable((emit) => {
       // Subscribe to postObservable (different from trcp subscription)
       const unsubscribe = postObservable.subscribe((updatedPosts) => {
@@ -39,5 +39,5 @@ export const postRouter = router({
         unsubscribe();
       };
     });
-  })
+  }),
 });
