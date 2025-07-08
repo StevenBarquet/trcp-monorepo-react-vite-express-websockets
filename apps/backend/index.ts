@@ -40,6 +40,13 @@ async function main() {
     createContext: createTRPCContext,
   });
 
+  wss.on('connection', (ws) => {
+    console.log(`➕➕ Connection (${wss.clients.size})`);
+    ws.once('close', () => {
+      console.log(`➖➖ Connection (${wss.clients.size})`);
+    });
+  });
+
   // setInterval(() => {
   //   console.log('Connected clients', wss.clients.size);
   // }, 1000);
@@ -50,7 +57,7 @@ async function main() {
 
   return {
     app,
-    socket: undefined,
+    wss,
   };
 }
 

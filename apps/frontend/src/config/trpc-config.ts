@@ -10,4 +10,9 @@ export function getBaseTrcpUrl() {
 
 export const wsClient = createWSClient({
   url: 'ws://localhost:2022',
+  connectionParams() {
+    return {
+      token: 'supersecret',
+    };
+  },
 });
