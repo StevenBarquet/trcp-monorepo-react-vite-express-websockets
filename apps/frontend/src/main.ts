@@ -27,7 +27,7 @@ const trpc = createTRPCClient<AppRouter>({
         client: wsClient,
       }),
       false: httpLink({
-        url: 'http://localhost:2022',
+        url: 'http://localhost:2022/trpc',
       }),
     }),
   ],

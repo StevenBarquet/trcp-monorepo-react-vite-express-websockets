@@ -19,7 +19,8 @@
     }
   },
   "rules": {
-    "prettier/prettier": "error",
+    "no-param-reassign": "off",
+    "prettier/prettier": "off",
     "import/first": "off",
     "require-jsdoc": [
       "warn",
@@ -33,15 +34,18 @@
         }
       }
     ],
+    "import/no-unresolved": "off",
+    "global-require": "off",
     // Javascript
     "no-console": "off",
     "no-unused-vars": 0,
-    "comma-dangle": ["warn", "never"],
+    "comma-dangle": ["warn", "always-multiline"],
     "no-use-before-define": ["error", { "functions": false, "classes": true, "variables": true }],
     "import/prefer-default-export": "off",
     "import/order": "off",
     "no-unneeded-ternary": "off",
     "max-len": "off",
+    "camelcase": "off",
     "object-curly-newline": "off",
     "no-underscore-dangle": "off",
     "operator-linebreak": "off",
