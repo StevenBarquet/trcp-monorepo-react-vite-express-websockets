@@ -16,10 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "@trpc/server": "11.4.3",
+    "@types/morgan": "1.9.10",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "debug": "4.4.1",
     "express": "5.1.0",
+    "morgan": "1.10.0",
     "tsc-alias": "1.6.11",
     "typescript": "5.8.3",
     "ws": "8.18.0",

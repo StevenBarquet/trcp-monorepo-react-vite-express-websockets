@@ -2,41 +2,64 @@ import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { AppRouter, appRouter } from './src/trcp/app-router';
 import { WebSocketServer } from 'ws';
-import express from 'express';
-import cors from 'cors';
+import express, { Application } from 'express';
 import http from 'http';
 import { createTRPCContext } from 'src/trcp-context';
+import { bootstrap } from 'src/bootstrap';
 
-const app = express();
-app.use(cors());
-app.use(express.json()); // body-parser
+/** Main wrapper */
+async function main() {
+  // ---------------- CONFIG
+  const app: Application = express();
+  // ---------------- BOOTSTRAP
+  await bootstrap(app);
 
-// ---- Endpoints REST normales ----------------------
-app.get('/health', (_req, res) => {
-  res.json({ ok: true });
-});
+  // ---------------- REST ENDPOINTS
+  app.get('/health', (_req, res) => {
+    res.json({ ok: true });
+  });
 
-// ---- tRPC Routers -----------------------------
-app.use(
-  '/trpc',
-  createExpressMiddleware({
+  // ---------------- tRPC ROUTERS
+  app.use(
+    '/trpc',
+    createExpressMiddleware({
+      router: appRouter,
+      createContext: createTRPCContext,
+    }),
+  );
+
+
+  // ---------------- HTTP SERVER
+  const server = http.createServer(app); // Can be HTTP or HTTPS
+
+  // ---------------- WS SERVER
+  const wss = new WebSocketServer({ server });
+  applyWSSHandler<AppRouter>({
+    wss,
     router: appRouter,
     createContext: createTRPCContext,
-  }),
-);
+  });
 
-// Levantamos servidor HTTP a partir de Express
-const server = http.createServer(app);
+  // setInterval(() => {
+  //   console.log('Connected clients', wss.clients.size);
+  // }, 1000);
 
-// ws server
-const wss = new WebSocketServer({ server });
-applyWSSHandler<AppRouter>({
-  wss,
-  router: appRouter,
-  createContext: createTRPCContext,
-});
+  server.listen(2022, () => {
+    console.log('listening on port 2022');
+  });
 
-// setInterval(() => {
-//   console.log('Connected clients', wss.clients.size);
-// }, 1000);
-server.listen(2022);
+  return {
+    app,
+    socket: undefined,
+  };
+}
+
+main()
+  // .then(async () => {
+  //   await prisma.$disconnect();
+  // })
+  .catch(async (e) => {
+    console.error(e);
+    // await prisma.$disconnect();
+    process.exit(1);
+  });
