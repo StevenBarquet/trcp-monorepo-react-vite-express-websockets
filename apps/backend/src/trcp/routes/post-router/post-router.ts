@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { publicProcedure, router } from '../../init';
 import { observable } from '@trpc/server/observable';
-import { PostsObservable } from './data';
+import { Post, PostsObservable } from './data';
 
 const postObservable = new PostsObservable();
 
@@ -28,7 +28,7 @@ export const postRouter = router({
 
   // Subscription to get updated posts
   postSubscription: publicProcedure.subscription(() => {
-    return observable((emit) => {
+    return observable<Post[] | undefined, any>((emit) => {
       // Subscribe to postObservable (different from trcp subscription)
       const unsubscribe = postObservable.subscribe((updatedPosts) => {
         emit.next(updatedPosts);

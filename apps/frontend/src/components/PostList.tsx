@@ -7,7 +7,7 @@ export function PostList() {
   return (
     <div className={styles.PostList}>
       <ol>
-        {(subscription.data as { title: string; id: string }[])?.map((post) => (
+        {subscription.data?.map((post) => (
           <li key={post.id}>{post.title}</li>
         ))}
       </ol>
